@@ -1,0 +1,98 @@
+{% load static %}
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SignUp</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allstyles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <title>{% block title %}Contentuni{% endblock %}</title>
+</head>
+<body class="home">
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+</body>
+    <script type="text/javascript " src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="{% static 'js/system.js' %}"></script>
+    <script type="text/javascript">
+        Highcharts.chart('activityChart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Total Activity per Day'
+            },
+            subtitle: {
+                text: null
+            },
+            xAxis: {
+                // categories: [
+                //     'Jan',
+                //     'Feb',
+                //     'Mar',
+                //     'Apr',
+                //     'May',
+                //     'Jun',
+                //     'Jul',
+                //     'Aug',
+                //     'Sep',
+                //     'Oct',
+                //     'Nov',
+                //     'Dec'
+                // ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 10,
+                }
+            },
+            series: [{
+                name: 'Submitted',
+                data: [49.9],
+                color: '#aaaaaa'
+
+            }, {
+                name: 'Approved',
+                data: [83.6],
+                color: '#8dc63f'
+
+            }, {
+                name: 'Published',
+                data: [48.9],
+                color: '#40bbea'
+
+            }, {
+                name: 'Rejected',
+                data: [42.4],
+                color: '#cc3f44'
+
+            }]
+        });
+        </script>
+</html>

@@ -1,0 +1,211 @@
+{% load static %}
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allstyles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}">
+</head>
+<body class="home">
+    <div class="mainContainer">
+        <header class="header">
+            <div class="headerTop">
+                 <a href="#" class="menuBtn fa fa-bars"></a>
+                 <div class="logoWrap">
+                <a href="#" target="blank" class="logo">
+                    <img src="{% static 'images/white.png' %}" height="" width="" alt="logo" class="logoImg">
+                </a>
+                </div>
+
+                        <div class="profileData">
+                            <div class="dropdown">
+                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <img src="{% static 'images/dp.jpg' %}" height="35%" width="35%" alt="dp" class="loginDp">{{ user.username }}
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right ">
+                                    <ul>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'edit_user' pk=user.id %}"><i class="fa fa-wrench"></i> Profile/settings</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'change_password' %}"><i class="fa fa-wrench"></i> Update Password</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-lock"></i>Logout</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+            <ul class="main-menu-nav">
+                <li><a href="{% url 'home' %}" class=""> <i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                {% if user.is_superuser %}
+                    <li><a href="{% url 'users_list' %}" class=""> <i class="fa fa-book"></i><span>Users List</span></a></li>
+                    <li><a href="{% url 'users_info' %}" class=""> <i class="fa fa-book"></i><span>Users Info</span></a></li>
+                    <li><a href="{% url 'topics' %}"><i class="fa fa-file"></i><span>Topics</span></a></li>
+                    <li><a href="{% url 'get_withdraw_requests' %}"><i class="fa fa-file"></i><span>Withdraw Requests</span></a></li>
+                {% elif user.role == 'manager' %}
+                    <li><a href="{% url 'users_list' %}" class=""> <i class="fa fa-book"></i><span>Content Writers</span></a></li>
+                    <li><a href="{% url 'topics' %}"><i class="fa fa-file"></i><span>Topics</span></a></li>
+                    <li><a href="#" class=""><i class="fa fa-download"></i><span>Submissions</span></a>
+                    <ul>
+                        <li><a href="{% url 'articles' %}">All Articles</a></li>
+{#                        <li><a href="{% url 'articles_type' article_type='draft' %}">Submitted</a></li>#}
+{#                        <li><a href="{% url 'articles_type' article_type='in_progress' %}">In Progress</a></li>#}
+{#                        <li><a href="{% url 'articles_type' article_type='approved' %}">Approved</a></li>#}
+{#                        <li><a href="{% url 'articles_type' article_type='rejected' %}">Rejected</a></li>#}
+                    </ul>
+                </li>
+                {% else %}
+                <li><a href="{% url 'topics' %}"><i class="fa fa-file"></i><span>Topics</span></a></li>
+                <li><a href="{% url 'my_topics' %}"><i class="fa fa-file"></i><span>My Topics</span></a></li>
+                <li><a href="{% url 'wallet' %}"><i class="fa fa-file"></i><span>My Wallet</span></a></li>
+                <li><a href="#" class=""><i class="fa fa-download"></i><span>Submissions</span></a>
+                    <ul>
+                        <li><a href="{% url 'articles' %}">Submitted</a></li>
+{#                        <li><a href="#">Approved</a></li>#}
+{#                        <li><a href="#">Published</a></li>#}
+{#                        <li><a href="#">Rejected</a></li>#}
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+        </header>
+
+        <div class="main">
+            <div class="topBar">
+                <div class="container-fluid">
+                    <div class="topBarWrap">
+                        <a href="#" class="menuBtn fa fa-bars"></a>
+                        <div class="profileData">
+                            <div class="dropdown">
+                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <img src="{% static 'images/dp.jpg' %}" height="" width="" alt="dp" class="loginDp"> {{ user.username }}
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right ">
+                                    <ul>
+                                        <li><a class="dropdown-item" href="{% url 'edit_user' pk=user.id %}"><i class="fa fa-wrench"></i> Profile/settings</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'change_password' %}"><i class="fa fa-wrench"></i> Update Password</a></li>
+
+                                        <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-lock"></i>Logout</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% block content %}
+    {% endblock %}
+            <div class="footer">
+                <div class="container-fluid">
+                    <p>© 2020 <a href="http://contentuni.com/" target="_blank">Contentuni.com</a> | Powered by <strong><a href="https://www.rirm.in/" target="_blank"> RIRM.in</a></strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script type="text/javascript " src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/system.js' %}"></script>
+    <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+
+
+{% for topic in topics %}
+    {% if topic.remaining_time %}
+    <script>
+            var deadline = new Date("{{ topic.remaining_time }}").getTime();
+                var x = setInterval(function() {
+                    var now = new Date().getTime();
+                    var t = deadline - now;
+                    var days = Math.floor(t / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((t % (1000 * 60)) / 1000);
+                    document.getElementById("remaining-time-" + '{{ topic.id }}').innerHTML = days + "d "
+                        + hours + "h " + minutes + "m " + seconds + "s ";
+                    if (t < 0) {
+                        clearInterval(x);
+                        document.getElementById("remaining-time-" + '{{ topic.id }}').innerHTML = "EXPIRED";
+                    }
+                }, 1000);
+
+    </script>
+    {% endif %}
+
+    {% endfor %}
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('#users-list').DataTable();
+            $('#users-list tbody').on( 'click', 'tr', function (event) {
+                $(this).toggleClass('selected');
+                if (event.target.type !== 'checkbox') {
+                    $(':checkbox', this).trigger('click');
+                }
+                document.getElementById("form-button").disabled = false;
+            } );
+
+            $('#button').click( function () {
+                alert( table.rows('.selected').data().length +' row(s) selected' );
+            } );
+        });
+        $(document).ready(function() {
+            $('#articles-list').DataTable();
+            $('#articles-list tbody').on( 'click', 'tr', function (event) {
+                $(this).toggleClass('selected');
+                if (event.target.type !== 'checkbox') {
+                    $(':checkbox', this).trigger('click');
+                }
+                document.getElementById("form-button").disabled = false;
+            } );
+
+            $('#button').click( function () {
+                alert( table.rows('.selected').data().length +' row(s) selected' );
+            } );
+        });
+        $(document).ready(function() {
+            $('#topics-list').DataTable();
+            $('#topics-list tbody').on( 'click', 'tr', function (event) {
+                $(this).toggleClass('selected');
+                if (event.target.type !== 'checkbox') {
+                    $(':checkbox', this).trigger('click');
+                }
+                document.getElementById("form-button").disabled = false;
+            } );
+
+            $('#button').click( function () {
+                alert( table.rows('.selected').data().length +' row(s) selected' );
+            } );
+        });
+
+
+
+        function countdown(remaining_time) {
+
+            var deadline = new Date(remaining_time).getTime();
+
+            var x = setInterval(function () {
+                var now = new Date().getTime();
+                var t = deadline - now;
+                var days = Math.floor(t / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((t % (1000 * 60)) / 1000);
+                document.getElementById("demo").innerHTML = days + "d "
+                    + hours + "h " + minutes + "m " + seconds + "s ";
+                if (t < 0) {
+                    clearInterval(x);
+                    document.getElementById("demo").innerHTML = "EXPIRED";
+                }
+                console.log(deadline);
+            }, 1000);
+        }
+        </script>
+
+</html>
