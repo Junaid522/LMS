@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db import connection
 from .models import Borrower
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 cursor = connection.cursor()
 
@@ -9,6 +11,7 @@ cursor = connection.cursor()
 def index(request):
 	ssnexist = False
 	message = ""
+	user = User.objects.filter(id=request.user.id).first()
 	if(request.method == "POST"):
 		fname = request.POST['fname']
 		ssn = request.POST['ssn']
@@ -24,5 +27,10 @@ def index(request):
 			query = 'INSERT INTO Borrower(Ssn,Bname,Address,Phone) VALUES("'+ ssn +'","'+ fname +'","'+ address +'","'+ phone +'");'
 			cursor.execute(query)
 			message = "Successfully added the borrower"
-
-	return render(request,'addborrowers/index.html',{'ssnexist':ssnexist,'message':message})
+	try:
+		if (user.profile_picture, None):
+			image_url = user.profile_picture.url
+		return render(request,'addborrowers/index.html',{'ssnexist':ssnexist,'message':message, 'image_url': image_url})
+	except:
+		return render(request, 'addborrowers/index.html',
+					  {'ssnexist': ssnexist, 'message': message})

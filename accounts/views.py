@@ -1,9 +1,18 @@
+import os
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
 from django.views import generic, View
 from django.contrib.auth import get_user_model
+
+# from Library_Management_System.Library_Management_System.settings import MEDIA_ROOT
 from .forms import SignupForm, MyPasswordChangeForm
+
+from django.views.decorators.csrf import csrf_exempt
+
 
 User = get_user_model()
 
@@ -52,3 +61,48 @@ class UserPasswordResetView(PasswordResetView, UserPassesTestMixin):
             form.save()
             return redirect(reverse('users_list'))
         return render(request, self.template_name, {'form': form})
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+def getpage(request):
+    template_name = 'webcam.html'
+    return render(request, template_name=template_name)
+
+
+@csrf_exempt
+def saveimage(request):
+    if request.method == 'POST':
+        # save it somewhere
+        user = User.objects.filter(id=request.user.id).first()
+        f = open(MEDIA_ROOT + '/profile-pictures/someimage.jpg', 'wb')
+        f.write(request.body)
+        print(request.body)
+        f.close()
+        user.profile_picture = '/profile-pictures/someimage.jpg'
+        user.save()
+        # return the URL
+        return HttpResponse('http://localhost:8000/media/profile-pictures/someimage.jpg')
+    else:
+        return HttpResponse('no data')
+
+
+# class CaptureImageView(View):
+#     template_name = 'webcam.html'
+
+    # def get(self, request, *args, **kwargs):
+    #     return render(request, template_name=self.template_name)
+    #
+    # # @method_decorator(csrf_exempt)
+    # def post(self, request, *args, **kwargs):
+    #     if request.POST:
+    #         # save it somewhere
+    #         f = open(MEDIA_ROOT + '/webcamimages/someimage.jpg', 'wb')
+    #         f.write(request.raw_post_data)
+    #         f.close()
+    #         # return the URL
+    #         return HttpResponse('http://localhost:8000/media/webcamimages/someimage.jpg')
+    #     else:
+    #         return HttpResponse('no data')

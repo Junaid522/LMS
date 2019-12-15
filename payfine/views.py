@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import Borrower,BookLoans,Fines
 from django.db import connection
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 cursor = connection.cursor()
 
@@ -11,6 +13,7 @@ def index(request):
 	fines = ""
 	message = ""
 	get = True
+	user = User.objects.filter(id=request.user.id).first()
 	if(request.method == 'POST'):
 		if('searchfines' in request.POST):
 			get = False
@@ -55,10 +58,25 @@ def index(request):
 				query = "UPDATE Fines SET Fines.Paid = '1' WHERE Fines.Loan_id = '"+str(loanid[0])+"' AND Fines.Paid = '0'"
 				cursor.execute(query)
 			message = "Payment Successful."
-			return render(request,'payfine/index.html',{'fines':fines,'message':message,'get':get})
-
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
+				return render(request,'payfine/index.html',{'fines':fines,'message':message,'get':get, 'image_url': image_url})
+			except:
+				return render(request, 'payfine/index.html', {'fines': fines, 'message': message, 'get': get})
 		else:
 			message = "Something went wrong please try again."
-			return render(request,'payfine/index.html',{'fines':fines,'message':message,'get':get})
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
+				return render(request,'payfine/index.html',{'fines':fines,'message':message,'get':get, 'image_url': image_url})
+			except:
+				return render(request, 'payfine/index.html', {'fines': fines, 'message': message, 'get': get})
 	else:
-		return render(request,'payfine/index.html',{'fines':fines,'message':message,'get':get})
+		try:
+			if (user.profile_picture, None):
+				image_url = user.profile_picture.url
+			return render(request,'payfine/index.html',{'fines':fines,'message':message,'get':get, 'image_url': image_url})
+		except:
+			return render(request, 'payfine/index.html',
+						  {'fines': fines, 'message': message, 'get': get})
