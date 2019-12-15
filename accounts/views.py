@@ -76,13 +76,11 @@ def saveimage(request):
     if request.method == 'POST':
         # save it somewhere
         f = open(MEDIA_ROOT + '/profile-pictures/someimage.jpg', 'wb')
-        print('profile-pictures', dir(request))
         f.write(request.body)
         f.close()
         # return the URL
         return HttpResponse('http://localhost:8000/media/profile-pictures/someimage.jpg')
     else:
-        # print('profile-pictures', MEDIA_ROOT)
         return HttpResponse('no data')
 
 
