@@ -87,6 +87,7 @@ AUTH_USER_MODEL = 'accounts.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',       #mysql.connector.django',
+        # 'ENGINE': 'mysql.connector.django',
         'NAME': 'library',
         'USER': 'root',
         'PASSWORD': 'admin',
