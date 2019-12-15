@@ -12,7 +12,7 @@ class SignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'profile_picture', 'password1', 'password2',)
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2',)
 
     def clean_email(self):
         return self.cleaned_data['email'].lower()
@@ -33,7 +33,7 @@ class SignupForm(UserCreationForm):
         self.fields['last_name'].label = ''
         self.fields['username'].label = ''
         self.fields['email'].label = ''
-        self.fields['profile_picture'].label = ''
+        # self.fields['profile_picture'].label = ''
         self.fields['password1'].label = ''
         self.fields['password2'].label = ''
         self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'placeholder': "First Name"})
@@ -41,7 +41,7 @@ class SignupForm(UserCreationForm):
         self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': "Username"})
         self.fields['email'].widget.attrs.update(
             {'class': 'form-control', 'placeholder': "example@xyz.com", "style": "text-transform: lowercase;"})
-        self.fields['profile_picture'].widget.attrs.update({'class': 'form-control', 'id': 'profile-image'})
+        # self.fields['profile_picture'].widget.attrs.update({'class': 'form-control', 'id': 'profile-image'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': "Passsword"})
         self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': "Confirm Password"})
         self.fields['password1'].help_text = "Use 8 or more characters with mix of letters, numbers & symbols"

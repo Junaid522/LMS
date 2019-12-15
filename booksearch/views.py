@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db import connection
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 cursor = connection.cursor()
 
@@ -11,6 +12,8 @@ def index(request):
 	books = ""
 	message = ""
 	get = True
+	user = User.objects.filter(id=request.user.id).first()
+
 	if(request.method == "GET"):
 		if('search' in request.GET):
 			get = True
@@ -26,9 +29,19 @@ def index(request):
 			query = "SELECT BkAthr.Isbn, BkAthr.Title, BkAthr.authors, BkAthr.Availability FROM (SELECT Book.Isbn, Book.Title, GROUP_CONCAT(Authors.Name) authors, Book.Availability FROM Book,Book_Authors,Authors WHERE Book.Isbn = Book_Authors.Isbn AND Book_Authors.Author_id = Authors.Author_id GROUP BY Book.Isbn) AS BkAthr WHERE "+comparision
 			cursor.execute(query)
 			books = cursor.fetchall()
-			return render(request,'booksearch/index.html',{'books':books,'message':"",'get':get})
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
+				return render(request,'booksearch/index.html',{'books':books,'message':"",'get':get, 'image_url': image_url})
+			except:
+				return render(request, 'booksearch/index.html', {'books': books, 'message': "", 'get': get})
 		else:
-			return render(request, 'booksearch/index.html', {'books': books, 'message': message, 'get': get})
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
+				return render(request, 'booksearch/index.html', {'books': books, 'message': message, 'get': get, 'image_url':image_url})
+			except:
+				return render(request, 'booksearch/index.html', {'books': books, 'message': message, 'get': get})
 	elif(request.method == "POST"):
 		if('cardno' in request.POST):
 			keywords = request.POST['cardno'].split(',')
@@ -68,12 +81,23 @@ def index(request):
 						message = "Maximum of only 3 books can be checked out"
 			else:
 				message = "Invalid Card Number."
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
 
-			return render(request,'booksearch/index.html',{'books':books,'message':message,'get':get})
-
+				return render(request,'booksearch/index.html',{'books':books,'message':message,'get':get, 'image_url': image_url})
+			except:
+				return render(request, 'booksearch/index.html',
+							  {'books': books, 'message': message, 'get': get})
 		else:
 			print(request.POST)
-			return render(request,'booksearch/index.html',{'books':books,'message':message,'get':get})
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
+				return render(request,'booksearch/index.html',{'books':books,'message':message,'get':get, 'image_url': image_url})
+			except:
+				return render(request, 'booksearch/index.html',
+							  {'books': books, 'message': message, 'get': get})
 
 
 

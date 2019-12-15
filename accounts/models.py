@@ -7,7 +7,7 @@ class User(AbstractUser):
     last_name = models.CharField(verbose_name='Last Name', max_length=150)
     email = models.EmailField(verbose_name='Email', unique=True, max_length=75)
     username = models.CharField(verbose_name='Username', null=True, max_length=150, default=None, blank=True)
-    profile_picture = models.ImageField(upload_to='profile-pictures/', blank=True)
+    profile_picture = models.ImageField(upload_to='profile-pictures/', blank=True, max_length=4294967295)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     experience = models.IntegerField(verbose_name='Experience', blank=True, null=True)

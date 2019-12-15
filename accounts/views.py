@@ -71,13 +71,18 @@ def getpage(request):
     template_name = 'webcam.html'
     return render(request, template_name=template_name)
 
-@method_decorator(csrf_exempt)
+
+@csrf_exempt
 def saveimage(request):
     if request.method == 'POST':
         # save it somewhere
+        user = User.objects.filter(id=request.user.id).first()
         f = open(MEDIA_ROOT + '/profile-pictures/someimage.jpg', 'wb')
         f.write(request.body)
+        print(request.body)
         f.close()
+        user.profile_picture = '/profile-pictures/someimage.jpg'
+        user.save()
         # return the URL
         return HttpResponse('http://localhost:8000/media/profile-pictures/someimage.jpg')
     else:

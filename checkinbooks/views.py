@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db import connection
 from .models import Book,Borrower,Fines,BookLoans,Authors,BookAuthors
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 cursor = connection.cursor()
 
@@ -11,6 +13,7 @@ def index(request):
 	books = ""
 	message = ""
 	get = True
+	user = User.objects.filter(id=request.user.id).first()
 	if(request.method == "POST"):
 		if('checkin' in request.POST):
 			get = False
@@ -56,9 +59,27 @@ def index(request):
 			query = "UPDATE Book SET Availability = '1' WHERE Isbn = '"+isbn+"'"
 			cursor.execute(query)
 			message += "successfully checked in book."
-			return render(request,'checkinbooks/index.html',{'Books':books,'message':message, 'get':get})
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
+				return render(request,'checkinbooks/index.html',{'Books':books,'message':message, 'get':get, 'image_url': image_url})
+			except:
+				return render(request, 'checkinbooks/index.html',
+							  {'Books': books, 'message': message, 'get': get})
 		else:
 			message = "Please try again."
-			return render(request,'checkinbooks/index.html',{'Books':books,'message':message, 'get':get})	
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
+				return render(request,'checkinbooks/index.html',{'Books':books,'message':message, 'get':get, 'image_url': image_url})
+			except:
+				return render(request, 'checkinbooks/index.html',
+							  {'Books': books, 'message': message, 'get': get})
 	else:
-		return render(request,'checkinbooks/index.html',{'Books':books,'message':message, 'get':get})
+		try:
+			if (user.profile_picture, None):
+				image_url = user.profile_picture.url
+			return render(request,'checkinbooks/index.html',{'Books':books,'message':message, 'get':get, 'image_url': image_url})
+		except:
+			return render(request, 'checkinbooks/index.html',
+						  {'Books': books, 'message': message, 'get': get})

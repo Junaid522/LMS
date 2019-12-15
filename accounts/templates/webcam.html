@@ -5,10 +5,32 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Library Management System</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<title>JPEGCam Test Page</title>
 </head>
 <body>
-	<table><tr><td valign=top>
+<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="../">Library Management System</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="../booksearch">Book Search</a></li>
+	      <li><a href="../checkinbooks">Check-In</a></li>
+	      <li><a href="../payfine">Pay Fine</a></li>
+	      <li><a href="../addborrowers">Add Borrowers</a></li>
+	    </ul>
+          <ul class="nav navbar-nav" style="float: right;">
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+	  </div>
+	</nav>
+	<table class="text-center"><tr><td valign=top>
 	<h1>JPEGCam Test Page</h1>
 
 	<!-- First, include the JPEGCam JavaScript Library -->
@@ -33,15 +55,8 @@
 	</script>
 
 	<!-- Some buttons for controlling things -->
-	<br/><form>
-		<input type="hidden" name="csrfmiddlewaretoken">
-                <p> <input type="text" name="first_name" maxlength="150" class="form-control" placeholder="First Name" required id="id_first_name"></p>
-<p> <input type="text" name="last_name" maxlength="150" class="form-control" placeholder="Last Name" required id="id_last_name"></p>
-<p> <input type="text" name="username" maxlength="150" class="form-control" placeholder="Username" id="id_username"></p>
-<p> <input type="email" name="email" maxlength="200" autofocus class="form-control" placeholder="example@xyz.com" style="text-transform: lowercase;" required id="id_email"></p>
-<p> <input type="file" name="profile_picture" accept="image/*" class="form-control" id="profile-image"></p>
-<p> <input type="password" name="password1" autocomplete="new-password" class="form-control" placeholder="Passsword" required id="id_password1"> <span class="helptext">Use 8 or more characters with mix of letters, numbers & symbols</span></p>
-<p> <input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="Confirm Password" required id="id_password2"> <span class="helptext">Enter the same password as before, for verification.</span></p>
+	<br/><form class="text-center">
+		{% csrf_token %}
 		<input type=button value="Configure..." onClick="webcam.configure()">
 		&nbsp;&nbsp;
 		<input type=button value="Take Snapshot" onClick="take_snapshot()">
