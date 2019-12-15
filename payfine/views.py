@@ -47,7 +47,13 @@ def index(request):
 					cursor.execute(query)
 
 			message = "Successfully Refreshed Fines"
-			return render(request,'payfine/index.html',{'fines':fines,'message':message,'get':get})
+			try:
+				if (user.profile_picture, None):
+					image_url = user.profile_picture.url
+				return render(request,'payfine/index.html',{'fines':fines,'message':message,'get':get, 'image_url':image_url})
+			except:
+				return render(request, 'payfine/index.html',
+							  {'fines': fines, 'message': message, 'get': get})
 
 		elif('cardnumber' in request.POST):
 			cardnumber = request.POST['cardnumber']
