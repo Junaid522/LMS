@@ -90,7 +90,7 @@ DATABASES = {
         # 'ENGINE': 'mysql.connector.django',
         'NAME': 'library',
         'USER': 'root',
-        'PASSWORD': 'admin',
+        'PASSWORD': '1234567a',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -119,6 +119,10 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_PIPELINE = (
+    'accounts.pipeline.save_profile_picture',
 )
 
 # Internationalization

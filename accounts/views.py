@@ -77,32 +77,13 @@ def saveimage(request):
     if request.method == 'POST':
         # save it somewhere
         user = User.objects.filter(id=request.user.id).first()
-        f = open(MEDIA_ROOT + '/profile-pictures/someimage.jpg', 'wb')
+        f = open(MEDIA_ROOT + '/profile-pictures/'+ user.id +'.jpg', 'wb')
         f.write(request.body)
         print(request.body)
         f.close()
-        user.profile_picture = '/profile-pictures/someimage.jpg'
+        user.profile_picture = '/profile-pictures/'+ user.id +'.jpg'
         user.save()
         # return the URL
-        return HttpResponse('http://localhost:8000/media/profile-pictures/someimage.jpg')
+        return HttpResponse('http://localhost:8000/media/profile-pictures/'+ user.id +'.jpg')
     else:
         return HttpResponse('no data')
-
-
-# class CaptureImageView(View):
-#     template_name = 'webcam.html'
-
-    # def get(self, request, *args, **kwargs):
-    #     return render(request, template_name=self.template_name)
-    #
-    # # @method_decorator(csrf_exempt)
-    # def post(self, request, *args, **kwargs):
-    #     if request.POST:
-    #         # save it somewhere
-    #         f = open(MEDIA_ROOT + '/webcamimages/someimage.jpg', 'wb')
-    #         f.write(request.raw_post_data)
-    #         f.close()
-    #         # return the URL
-    #         return HttpResponse('http://localhost:8000/media/webcamimages/someimage.jpg')
-    #     else:
-    #         return HttpResponse('no data')
